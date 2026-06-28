@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-units="c">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auralis — Premium Weather Forecast Dashboard</title>
+  <meta name="description" content="Auralis is a premium, glassmorphic weather dashboard with 7-day forecasts, hourly outlook, air quality, UV, wind and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- Animated weather background layers -->
+  <div class="bg-scene" id="bgScene" aria-hidden="true">
+    <div class="bg-gradient" id="bgGradient"></div>
+    <div class="bg-layer clouds" id="layerClouds"></div>
+    <div class="bg-layer rain" id="layerRain"></div>
+    <div class="bg-layer snow" id="layerSnow"></div>
+    <div class="bg-layer stars" id="layerStars"></div>
+    <div class="bg-layer sun-glow" id="layerSun"></div>
+    <div class="bg-layer lightning" id="layerLightning"></div>
+  </div>
+
+  <div class="app-shell">
+    <!-- Sidebar (desktop) -->
+    <aside class="sidebar glass" id="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <div class="brand-mark">☀︎</div>
+        <div class="brand-text">
+          <span class="brand-name">Auralis</span>
+          <span class="brand-sub">Weather</span>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <a class="side-link active" href="#hero"><span class="ico">◐</span> Dashboard</a>
+        <a class="side-link" href="#hourly"><span class="ico">⏱</span> Hourly</a>
+        <a class="side-link" href="#daily"><span class="ico">▦</span> 7-Day</a>
+        <a class="side-link" href="#map"><span class="ico">⊕</span> Map</a>
+        <a class="side-link" href="#highlights"><span class="ico">✦</span> Highlights</a>
+      </nav>
+
+      <div class="side-section">
+        <p class="side-title">Favorites</p>
+        <ul class="fav-list" id="favList"><li class="muted small">No favorites yet</li></ul>
+      </div>
+
+      <div class="side-section">
+        <p class="side-title">Recent</p>
+        <ul class="recent-list" id="recentList"><li class="muted small">Search a city</li></ul>
+      </div>
+
+      <div class="side-footer muted small">Powered by WeatherAPI</div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Top app bar -->
+      <header class="topbar glass" role="banner">
+        <button class="icon-btn ripple menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+
+        <form class="search" id="searchForm" role="search">
+          <span class="search-ico">⌕</span>
+          <input id="searchInput" class="search-input" type="text" placeholder="Search city…" autocomplete="off" aria-label="Search city" />
+          <ul class="suggest" id="suggest" role="listbox"></ul>
+        </form>
+
+        <div class="topbar-actions">
+          <button class="icon-btn ripple" id="locBtn" aria-label="Use my location" title="Use my location">⌖</button>
+          <button class="unit-toggle ripple" id="unitToggle" aria-label="Toggle temperature unit">
+            <span class="u u-c active">°C</span><span class="u u-f">°F</span>
+          </button>
+          <button class="icon-btn ripple" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme">☾</button>
+        </div>
+      </header>
+
+      <div class="offline-banner" id="offlineBanner" hidden>⚠ You are offline — showing the last loaded data.</div>
+      <div class="error-banner" id="errorBanner" hidden></div>
+
+      <div class="dashboard">
+        <!-- HERO -->
+        <section class="hero glass card" id="hero" aria-live="polite">
+          <div class="hero-main">
+            <div class="hero-loc">
+              <h1 class="loc-name" id="locName">—</h1>
+              <p class="loc-meta" id="locMeta">—</p>
+              <button class="chip-btn ripple" id="favBtn" aria-pressed="false">☆ Save</button>
+            </div>
+            <div class="hero-temp">
+              <div class="hero-icon float" id="heroIcon">⛅</div>
+              <div class="temp-block">
+                <span class="temp-big" id="tempBig">—</span>
+                <span class="temp-cond" id="tempCond">—</span>
+                <span class="temp-feels muted" id="tempFeels">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-quick" id="heroQuick"></div>
+        </section>
+
+        <!-- HIGHLIGHTS -->
+        <section id="highlights" class="section">
+          <h2 class="section-title">Today's Highlights</h2>
+          <div class="grid highlights-grid" id="highlightsGrid"></div>
+        </section>
+
+        <!-- HOURLY -->
+        <section id="hourly" class="section">
+          <h2 class="section-title">Hourly Forecast</h2>
+          <div class="hourly-scroll" id="hourlyScroll"></div>
+        </section>
+
+        <!-- DAILY -->
+        <section id="daily" class="section">
+          <h2 class="section-title">7-Day Forecast</h2>
+          <div class="daily-list glass card" id="dailyList"></div>
+        </section>
+
+        <!-- MAP -->
+        <section id="map" class="section">
+          <h2 class="section-title">Weather Map</h2>
+          <div class="map-card glass card">
+            <iframe id="mapFrame" class="map-frame" title="Weather location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </section>
+
+        <!-- ALERTS -->
+        <section id="alerts" class="section" hidden>
+          <h2 class="section-title">Weather Alerts</h2>
+          <div class="alerts-wrap" id="alertsWrap"></div>
+        </section>
+      </div>
+
+      <footer class="footer muted small">
+        <span>© <span id="year"></span> Auralis Weather</span>
+        <span>Data: WeatherAPI.com</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <script src="./script.js"></script>
+</body>
+</html>
