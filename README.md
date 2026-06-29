@@ -52,7 +52,7 @@ Auralis Weather Dashboard is a clean and responsive weather application that fet
 ## 📸 Preview
 
 <p align="center">
-  <img src="./Weather.png" alt="Weather Dashboard Preview" width="90%">
+  <img src="./Whether-dashboard.png" alt="Auralis Weather Dashboard" width="90%">
 </p>
 
 ---
