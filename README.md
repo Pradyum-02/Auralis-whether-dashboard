@@ -98,7 +98,7 @@ Open index.html
 
 **Pradyum Meshram**
 
-Computer Engineering Student
+Crafted with love & A lot of Coffee.
 
 ---
 
